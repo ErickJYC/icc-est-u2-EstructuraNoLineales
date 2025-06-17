@@ -52,7 +52,18 @@ public class ArbolBinario {
     public void imprimirArbolPreorden(){
         imprimirPreorden(root);
     }
-//    public boolean buscar (int value){
-//        return buscar(root,value);
-//    }
+    public boolean buscar (int value){
+        return buscar(value);
+    }
+    public boolean buscarRec(Node padre, int value){
+        if (padre.getValue() == value)
+            return true;
+        if (value < padre.getValue()) {
+            if (value > padre.getValue()){
+                return buscarRec(padre, value);
+            }
+
+        }
+        return false;
+    }
 }

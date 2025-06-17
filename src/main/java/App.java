@@ -15,6 +15,11 @@ public class App {
 
         ab.imprimirArbol();
         ab.imprimirArbolPreorden();
+        ab.buscar(23);
+        if (!ab.buscar(77)) {
+            System.out.println("No encontro");
+
+        }
     }
 
 }
