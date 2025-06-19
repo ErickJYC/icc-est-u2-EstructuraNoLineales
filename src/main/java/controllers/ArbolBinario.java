@@ -4,66 +4,122 @@ import models.Node;
 
 public class ArbolBinario {
     private Node root;
+
     public ArbolBinario() {
         this.root = null;
     }
 
+    // Insertar valor
     public void insert(int value){
         root = insertRec(root, value);
-
     }
 
-    private Node insertRec(Node padre, int value){
-        if (root == null){
+    private Node insertRec(Node current, int value){
+        if (current == null){
             return new Node(value);
         }
-        if (value < padre.getValue())
-//            ME VOY A LA IZQUIERDA
-            padre.setLeft(insertRec(padre.getLeft(),value));
-
-         else if (value > padre.getValue()) {
-//            ME VOY A LA DERECHA
-            padre.setLeft(insertRec(padre.getRight(),value));
-
+        if (value < current.getValue()) {
+            current.setLeft(insertRec(current.getLeft(), value));
+        } else if (value > current.getValue()) {
+            current.setRight(insertRec(current.getRight(), value)); // ✅ Aquí se corrigió
         }
-        return padre;
-    }
-    public void imprimirArbol(){
-        imprimir(root);
-
+        return current;
     }
 
-    private void imprimir(Node node){
+    // InOrder simple
+    public void imprimirInOrder(){
+        imprimirInOrder(root);
+        System.out.println();
+    }
+
+    private void imprimirInOrder(Node node){
         if (node != null) {
-            imprimir(node.getLeft());
-            System.out.println(node.getValue() + " , ");
-            imprimir(node.getRight());
+            imprimirInOrder(node.getLeft());
+            System.out.print(node.getValue() + ", ");
+            imprimirInOrder(node.getRight());
         }
     }
-//    Preorden
-    public void imprimirPreorden(Node node){
-        if (node != null){
-            System.out.println(node.getValue() + " , ");
-            imprimir(node.getLeft());
-            imprimir(node.getRight());
-        }
 
+    // InOrder con altura
+    public void imprimirAlturas(){
+        imprimirAlturasRec(root);
+        System.out.println();
     }
-    public void imprimirArbolPreorden(){
-        imprimirPreorden(root);
+
+    private void imprimirAlturasRec(Node node){
+        if (node != null) {
+            imprimirAlturasRec(node.getLeft());
+            System.out.print(node.getValue() + "(h=" + altura(node) + "), ");
+            imprimirAlturasRec(node.getRight());
+        }
     }
-    public boolean buscar (int value){
-        return buscar(value);
+
+    // InOrder con factor de equilibrio
+    public void imprimirBalanceFactors(){
+        imprimirBFRec(root);
+        System.out.println();
     }
-    public boolean buscarRec(Node padre, int value){
-        if (padre.getValue() == value)
-            return true;
-        if (value < padre.getValue()) {
-            if (value > padre.getValue()){
-                return buscarRec(padre, value);
+
+    private void imprimirBFRec(Node node){
+        if (node != null) {
+            imprimirBFRec(node.getLeft());
+            System.out.print(node.getValue() + "(bf=" + balanceFactor(node) + "), ");
+            imprimirBFRec(node.getRight());
+        }
+    }
+
+    // Altura
+    private int altura(Node node) {
+        if (node == null) return 0;
+        return 1 + Math.max(altura(node.getLeft()), altura(node.getRight()));
+    }
+
+    // Factor de equilibrio
+    private int balanceFactor(Node node) {
+        if (node == null) return 0;
+        return altura(node.getRight()) - altura(node.getLeft());
+    }
+
+    // Ver si el árbol está equilibrado
+    public boolean estaEquilibrado() {
+        return estaEquilibradoRec(root);
+    }
+
+    private boolean estaEquilibradoRec(Node node){
+        if (node == null) return true;
+        int bf = balanceFactor(node);
+        if (Math.abs(bf) > 1) return false;
+        return estaEquilibradoRec(node.getLeft()) && estaEquilibradoRec(node.getRight());
+    }
+
+    // Imprimir nodos desequilibrados
+    public void imprimirDesequilibrados(){
+        imprimirDesequilibradosRec(root);
+    }
+
+    private void imprimirDesequilibradosRec(Node node){
+        if (node != null) {
+            imprimirDesequilibradosRec(node.getLeft());
+            int bf = balanceFactor(node);
+            if (Math.abs(bf) > 1) {
+                System.out.println("Nodo desequilibrado: " + node.getValue() + " (fE = " + bf + ")");
             }
-
+            imprimirDesequilibradosRec(node.getRight());
         }
-        return false;
+    }
+
+    // Altura total del árbol
+    public int getAltura() {
+        return altura(root);
+    }
+
+    // Peso del árbol
+    public int getPeso() {
+        return contarNodos(root);
+    }
+
+    private int contarNodos(Node node) {
+        if (node == null) return 0;
+        return 1 + contarNodos(node.getLeft()) + contarNodos(node.getRight());
     }
 }

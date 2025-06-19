@@ -3,23 +3,36 @@ import models.Node;
 
 public class App {
     public static void main(String[] args) {
-        ArbolBinario ab = new ArbolBinario();
-        ab.insert(50);
-        ab.insert(17);
-        ab.insert(76);
-        ab.insert(9);
-        ab.insert(23);
-        ab.insert(54);
-        ab.insert(14);
-        ab.insert(19);
+        ArbolBinario arbol = new ArbolBinario();
 
-        ab.imprimirArbol();
-        ab.imprimirArbolPreorden();
-        ab.buscar(23);
-        if (!ab.buscar(77)) {
-            System.out.println("No encontro");
+        int[] valoresIniciales = {9, 14, 17, 19, 23, 50, 54, 76};
 
+        for (int val : valoresIniciales) {
+            arbol.insert(val);
         }
+        System.out.println("\nPeso del árbol = " + arbol.getPeso());
+        System.out.println("Altura es = " + arbol.getAltura());
+
+        System.out.print("\nArbol InOrder\n");
+        arbol.imprimirInOrder();
+
+        System.out.print("\nArbol InOrder con alturas\n");
+        arbol.imprimirAlturas();
+
+        System.out.print("\nArbol InOrder con factor de equilibrio\n");
+        arbol.imprimirBalanceFactors();
+
+        boolean equilibradoAntes = arbol.estaEquilibrado();
+        System.out.println("\nArbol está equilibrado = " + equilibradoAntes);
+
+        System.out.println("\nAgregamos valor = 15");
+        arbol.insert(15);
+
+        System.out.print("\nArbol InOrder con factor de equilibrio\n");
+        arbol.imprimirBalanceFactors();
+
+        System.out.println("\nNodos desequilibrados:");
+        arbol.imprimirDesequilibrados();
     }
 
 }
